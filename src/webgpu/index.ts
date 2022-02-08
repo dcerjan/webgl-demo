@@ -259,8 +259,13 @@ const init = async (canvas: HTMLCanvasElement): Promise<GPUCanvasContext> => {
     })
     new Float32Array(uploadBuffer.getMappedRange()).set([angle])
     uploadBuffer.unmap()
-
-    commandEncoder.copyBufferToBuffer(uploadBuffer, 0, uniformBuffer, 24 * 4, 1 * 4)
+    commandEncoder.copyBufferToBuffer(
+      uploadBuffer,
+      0, // src start offset
+      uniformBuffer,
+      24 * 4, // dest start offset (write into uniforms.angle)
+      1 * 4, // number of bytes to copy over (sizeof f32)
+    )
 
     const renderPass = commandEncoder.beginRenderPass(renderPassDesc)
     renderPass.setPipeline(pipeline)
